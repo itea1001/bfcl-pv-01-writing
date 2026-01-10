@@ -1,28 +1,32 @@
 # Blog Post Outline: Prompt Format Variations in Function Calling
 
 ## 1. Introduction and Motivation [DRAFTED - see 01-intro-motivation.md]
-- Brief overview of function calling in LLMs
-- Function calling is critical for LLM applications (tools, APIs, agents)
-- The challenge: Different prompting formats exist (JSON, XML, Python) but little research on their impact
-- Existing benchmarks focus on "what" models can do, not "how" format affects performance
-- Real-world implications: choosing the wrong format could significantly impact application reliability
-- Current practice is largely trial-and-error
-- Our research question: How sensitive are LLMs to prompt format variations in function calling tasks?
+- Function calling as cornerstone capability for modern LLMs (tools, APIs, agents)
+- The gap: Wide variation in prompting formats but little systematic research on impact
+- Why it matters: Wrong format choice can cause 15+ percentage point accuracy drops
+- Real-world stakes: Production failures, expensive retries, wasted development time
+- Current practice: Trial-and-error approach without understanding tradeoffs
+- Our contribution: First systematic study of format variations in function calling
+- Key findings preview: Up to 20pp swings, smaller models 2-4× more sensitive, no universal best format
 
 ## 2. Methodology [DRAFTED - see 02-methodology.md]
 
 ### 2.1 Prompt Variation Design
-- **Response Format (res_fmt)**: JSON, XML, Python
-  - With and without tags (e.g., `<function_call>`)
-  - Controls how the model outputs function calls
-- **Documentation Format (doc_fmt)**: JSON, XML, Python
-  - Controls how function signatures are presented to the model in the system prompt
-- Total: 18 combinations (3 res_fmt × 2 tagged/untagged × 3 doc_fmt)
-- Examples of each format variation with side-by-side comparisons
+- Two orthogonal dimensions varied systematically:
+  - **Response Format (res_fmt)**: JSON, XML, Python (6 variants with/without tags)
+  - **Documentation Format (doc_fmt)**: JSON, XML, Python (how functions presented in system prompt)
+- Total: 18 unique configurations (6 response × 3 documentation formats)
+- Concrete examples included for calculate_area function showing:
+  - JSON docs: OpenAPI-style schemas
+  - Python docs: Docstring format with type hints  
+  - XML docs: XML Schema-inspired
+  - Corresponding response formats for each
 
-### 2.2 Test Categories
-- We evaluate on 8 core single-turn categories from the Berkeley Function-Calling Leaderboard (BFCL), chosen to cover the key complexity dimensions: simple, multiple, parallel, and parallel_multiple function calling, in both simulated and live API settings.
-- Evaluation follows the original BFCL methodology
+### 2.2 Evaluation Setup
+- 8 single-turn BFCL categories covering key complexity dimensions (simple/multiple/parallel/parallel_multiple in simulated and live settings)
+- Follow original BFCL methodology and scoring
+- Accuracy measured as % correctly formatted calls with valid parameters
+- Tested across multiple state-of-the-art models
 
 ## 3. Key Findings
 
