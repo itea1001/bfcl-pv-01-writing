@@ -1,6 +1,6 @@
 # Blog Post Outline: Prompt Format Variations in Function Calling
 
-## 1. Introduction and Motivation
+## 1. Introduction and Motivation [DRAFTED - see 01-intro-motivation.md]
 - Brief overview of function calling in LLMs
 - Function calling is critical for LLM applications (tools, APIs, agents)
 - The challenge: Different prompting formats exist (JSON, XML, Python) but little research on their impact
@@ -9,7 +9,7 @@
 - Current practice is largely trial-and-error
 - Our research question: How sensitive are LLMs to prompt format variations in function calling tasks?
 
-## 2. Methodology
+## 2. Methodology [DRAFTED - see 02-methodology.md]
 
 ### 2.1 Prompt Variation Design
 - **Response Format (res_fmt)**: JSON, XML, Python
