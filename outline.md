@@ -28,29 +28,31 @@
 - Accuracy measured as % correctly formatted calls with valid parameters
 - Tested across multiple state-of-the-art models
 
-## 3. Key Findings
+## 3. Key Findings [DRAFTED - see 03-results.md]
 
 ### 3.1 Overall Performance
-- GPT-4.1: 80.13% (best, most robust)
-- GPT-4o-mini: 79.37%
-- GPT-4o: 78.91%
+- 11 models tested (OpenAI GPT-4/5 series, reasoning models o1/o3-mini, xAI Grok series)
+- Grok models lead: grok-3-mini (83.5%), grok-3-beta (83.1%), grok-4 (79.5%)
+- OpenAI: GPT-4.1 (80.1%), GPT-4o-mini (79.4%), GPT-4o (78.9%)
+- Reasoning: o1 (78.4%), o3-mini (77.0%)
 
 ### 3.2 Prompt Sensitivity
-- **GPT-4o-mini**: Most sensitive (19.6 percentage point range, 66-86%)
-- **GPT-4o**: Moderate sensitivity (10.7 pp range)
-- **GPT-4.1**: Most robust (8.5 pp range)
-- Finding: Smaller models show 2-4× more variation than larger/newer models
+- **Most sensitive**: o3-mini (21.2pp), gpt-4o-mini (19.6pp), gpt-5-nano (20.0pp)
+- **Most robust**: GPT-4.1 (8.5pp), o1 (9.8pp), gpt-5 (10.1pp)
+- **Grok models**: Moderate sensitivity (10-12pp range)
+- Finding: Generally smaller models more sensitive, but grok-3-mini bucks trend
 
-### 3.3 Best Configurations per Model
-- **GPT-4o-mini**: XML response + JSON docs (86.0%)
-- **GPT-4o**: Python response + JSON docs (84.6%)
-- **GPT-4.1**: XML_tagged response + JSON docs (85.5%)
-- Key insight: No single "best" format across all models
+### 3.3 Best Configurations per Model  
+- **All models prefer JSON documentation** (doc_fmt=json)
+- Response format highly variable: Python (4 models), XML (4 models), JSON (2 models), XML_tagged (1 model)
+- **Key finding**: Grok models prefer json_tagged format (unlike all OpenAI models)
+- grok-3-mini achieves highest single configuration: 88.5% with json+json
 
 ### 3.4 Response Format Analysis
-- **Tagged formats consistently underperform**: 74-77% vs 80-81% for untagged
-- JSON documentation (doc_fmt=json) generally performs best across all models
-- Response format preference varies by model architecture
+- **Tagged format effects are model-specific**: Hurt OpenAI models (74-77% vs 80-81%) but help Grok models
+- JSON documentation universally best: 3-4pp advantage over Python/XML
+- XML struggles with type inference (31.4% type mismatch errors)
+- Python has enum value issues (38.4% of errors)
 
 ### 3.5 Common Failure Patterns
 - Type conversion errors (integers provided where floats expected)
