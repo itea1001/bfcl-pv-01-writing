@@ -28,70 +28,77 @@
 - Accuracy measured as % correctly formatted calls with valid parameters
 - Tested across multiple state-of-the-art models
 
-## 3. Key Findings [DRAFTED - see 03-results.md]
+## 3. Results [DRAFTED - see 03-results.md]
 
-### 3.1 Overall Performance
-- 11 models tested (OpenAI GPT-4/5 series, reasoning models o1/o3-mini, xAI Grok series)
-- Grok models lead: grok-3-mini (83.5%), grok-3-beta (83.1%), grok-4 (79.5%)
-- OpenAI: GPT-4.1 (80.1%), GPT-4o-mini (79.4%), GPT-4o (78.9%)
-- Reasoning: o1 (78.4%), o3-mini (77.0%)
+### 3.1 Overall Model Performance
+- Performance tables for 11 models across 18 prompt variations
+- Grok models lead: grok-3-mini (83.5%), grok-3-beta (83.1%)
+- GPT-4.1 most robust (8.5pp variation range)
+- Smaller models generally show 2-3× more sensitivity
 
-### 3.2 Prompt Sensitivity
-- **Most sensitive**: o3-mini (21.2pp), gpt-4o-mini (19.6pp), gpt-5-nano (20.0pp)
-- **Most robust**: GPT-4.1 (8.5pp), o1 (9.8pp), gpt-5 (10.1pp)
-- **Grok models**: Moderate sensitivity (10-12pp range)
-- Finding: Generally smaller models more sensitive, but grok-3-mini bucks trend
+### 3.2 Best Configuration per Model
+- Tables showing optimal and worst configurations
+- All 11 models achieve best performance with JSON documentation
+- Response format preferences diverge across models and vendors
+- Grok models prefer tagged formats (unlike OpenAI models)
 
-### 3.3 Best Configurations per Model  
-- **All models prefer JSON documentation** (doc_fmt=json)
-- Response format highly variable: Python (4 models), XML (4 models), JSON (2 models), XML_tagged (1 model)
-- **Key finding**: Grok models prefer json_tagged format (unlike all OpenAI models)
-- grok-3-mini achieves highest single configuration: 88.5% with json+json
+### 3.3 Response Format Analysis
+- Tagged vs untagged performance tables
+- Documentation format impact: JSON outperforms Python/XML by 3.3-3.7pp
 
-### 3.4 Response Format Analysis
-- **Tagged format effects are model-specific**: Hurt OpenAI models (74-77% vs 80-81%) but help Grok models
-- JSON documentation universally best: 3-4pp advantage over Python/XML
-- XML struggles with type inference (31.4% type mismatch errors)
-- Python has enum value issues (38.4% of errors)
-
-### 3.5 Model Size vs Format Sensitivity
-- Clear trend: smaller models more sensitive to format choice
-- GPT-4 series: gpt-4o-mini (19.6pp) vs gpt-4o (10.7pp) vs gpt-4.1 (8.5pp)
-- GPT-5 series: nano (20pp) → mini (17.7pp) → full (10.1pp)
-- Exceptions: grok-3-mini bucks trend with strong performance despite size
-
-### 3.6 Common Failure Modes
-- Type coercion failures (34%): XML parses arrays as strings
-- Optional parameter omission (28%): Format affects default handling
-- Tagging-induced confusion (22%): Tags cause premature closes or incomplete outputs
-- Concrete examples showing when one format works but variations fail
-
-### 3.7 Category-Level Analysis
+### 3.4 Category-Level Analysis
 - Simple calls: Low format impact (5-8pp)
 - Multiple parallel calls: High impact (12-22pp)
-- Error pattern analysis by format
 
-### 3.8 Statistical Significance
-- All performance differences statistically significant
-- Confirms format effects are not due to chance
+### 3.5 Error Pattern Analysis
+- Distribution tables by error type and format
+- XML: 31.4% type mismatch errors
+- Python: 38.4% invalid enum errors
 
-## 4. Discussion
+### 3.6 Statistical Significance
+- All differences statistically significant (p < 0.05)
+- Confirms format effects are genuine
 
-### 4.1 Implications for Practitioners
-- Format choice matters more than previously thought (up to 20pp difference)
-- Smaller models require more careful format selection
-- JSON documentation appears to be a safe default
-- Avoid tagged response formats unless specifically required
+## 4. Discussion [DRAFTED - see 04-discussion.md]
 
-### 4.2 Implications for Model Developers
-- Prompt robustness should be a key evaluation metric
-- Newer/larger models show better format invariance
-- Training should emphasize format generalization
+### 4.1 Prompt Sensitivity by Model Family
+- **GPT-4 Family**: Decreasing sensitivity across generations (19.6pp → 10.7pp → 8.5pp)
+- **GPT-5 Family**: Clear size correlation, all prefer python+json
+- **Reasoning Models**: o1 stable (9.8pp), o3-mini highly sensitive (21.2pp)
+- **xAI Grok Family**: Moderate sensitivity, unique tagging preference
 
-### 4.3 Limitations
-- Focus on OpenAI models (GPT family)
+### 4.2 Model Size vs Format Sensitivity
+- Smaller models show 2-3× more variation than larger counterparts
+- Hypotheses: training diversity, capacity for abstraction, error propagation
+- Exceptions: grok-3-mini achieves strong robustness despite "mini" size
+
+### 4.3 Common Failure Modes
+- Type coercion failures (34%): XML parsing issues with arrays
+- Optional parameter omission (28%): Format affects default handling
+- Tagging-induced confusion (22%): Tags cause incomplete outputs
+- Detailed examples showing when formats fail
+
+### 4.4 Cross-Vendor Differences
+- OpenAI models: 7 out of 8 perform worst with tagged variants
+- xAI Grok models: 2 out of 3 prefer tagged formats
+- Format patterns not universal across vendors
+
+### 4.5 Implications for Practitioners
+- Format choice impacts performance up to 20pp
+- JSON documentation as safe default
+- Response format requires model-specific testing
+- Smaller models need more careful format selection
+
+### 4.6 Implications for Model Developers
+- Prompt robustness as evaluation metric (variation range)
+- Training for format generalization is feasible
+- Cross-vendor divergence suggests tractable design choices
+
+### 4.7 Limitations
+- Focus on OpenAI and xAI models
 - Single-turn scenarios only
-- Limited to 8 core categories from BFCL
+- Limited to 8 core BFCL categories
+- Exact match evaluation methodology
 
 ## 5. Future Work
 - Extend to other model families (Anthropic, Google, open-source)
