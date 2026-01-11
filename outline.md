@@ -54,11 +54,26 @@
 - XML struggles with type inference (31.4% type mismatch errors)
 - Python has enum value issues (38.4% of errors)
 
-### 3.5 Common Failure Patterns
-- Type conversion errors (integers provided where floats expected)
-- Missing optional parameters
-- Boolean value errors (providing `false` when only `true` is valid)
-- These errors vary significantly by prompt format
+### 3.5 Model Size vs Format Sensitivity
+- Clear trend: smaller models more sensitive to format choice
+- GPT-4 series: gpt-4o-mini (19.6pp) vs gpt-4o (10.7pp) vs gpt-4.1 (8.5pp)
+- GPT-5 series: nano (20pp) → mini (17.7pp) → full (10.1pp)
+- Exceptions: grok-3-mini bucks trend with strong performance despite size
+
+### 3.6 Common Failure Modes
+- Type coercion failures (34%): XML parses arrays as strings
+- Optional parameter omission (28%): Format affects default handling
+- Tagging-induced confusion (22%): Tags cause premature closes or incomplete outputs
+- Concrete examples showing when one format works but variations fail
+
+### 3.7 Category-Level Analysis
+- Simple calls: Low format impact (5-8pp)
+- Multiple parallel calls: High impact (12-22pp)
+- Error pattern analysis by format
+
+### 3.8 Statistical Significance
+- All performance differences statistically significant
+- Confirms format effects are not due to chance
 
 ## 4. Discussion
 
